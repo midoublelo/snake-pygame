@@ -5,8 +5,10 @@ Apples are always eaten and grant 1 point. Lemons are eaten 33% of the time and 
 
 ## Requirements
 - Pygame
-- sound for eating apples
-- sound for eating lemons
+- Sound for eating apples
+- Sound for eating lemons
+
+If you do not have Pygame you can either install it with 'pip install pygame'.
 
 ## Installation
 - Download game file
