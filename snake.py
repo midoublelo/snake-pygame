@@ -31,13 +31,13 @@ timer = pygame.time.Clock()
 snakeBlock = 10
 snakeSpeed = 10
  
-font_style = pygame.font.SysFont("linuxlibertineo", 25)
-score_font = pygame.font.SysFont("linuxlibertineo", 35)
+fontStyle = pygame.font.SysFont("linuxlibertineo", 25)
+scoreFont = pygame.font.SysFont("linuxlibertineo", 35)
 
 # sense.clear(grey)
 
 def playerScore(score):
-    value = score_font.render("Your Score: " + str(score), True, black)
+    value = scoreFont.render("Your Score: " + str(score), True, black)
     display.blit(value, [0, 0])
  
 def playerSnake(snake_block, snake_list):
@@ -45,12 +45,12 @@ def playerSnake(snake_block, snake_list):
         pygame.draw.rect(display, green, [x[0], x[1], snakeBlock, snakeBlock])
  
 def message(msg, color):
-    mesg = font_style.render(msg, True, color)
+    mesg = fontStyle.render(msg, True, color)
     display.blit(mesg, [windowWidth / 6, windowHeight / 3])
  
 def gameLoop():
-    game_over = False
-    game_close = False
+    gameOver = False
+    gameClose = False
  
     x1 = windowWidth / 2
     y1 = windowHeight / 2
@@ -58,20 +58,20 @@ def gameLoop():
     x1_change = 0
     y1_change = 0
  
-    snake_List = []
-    Length_of_snake = 1
+    snakeList = []
+    snakeLength = 1
  
-    foodXPos = round(random.randrange(0, windowWidth - snakeBlock) / 10.0) * 10.0
-    foodYPos = round(random.randrange(0, windowHeight - snakeBlock) / 10.0) * 10.0
-    powerUpXPos = round(random.randrange(0, windowWidth - snakeBlock) / 10.0) * 10.0
-    powerUpYPos = round(random.randrange(0, windowHeight - snakeBlock - 50) / 10.0) * 10.0
+    appleXPos = round(random.randrange(0, windowWidth - snakeBlock) / 10.0) * 10.0
+    appleYPos = round(random.randrange(0, windowHeight - snakeBlock) / 10.0) * 10.0
+    lemonXPos = round(random.randrange(0, windowWidth - snakeBlock) / 10.0) * 10.0
+    lemonYPos = round(random.randrange(0, windowHeight - snakeBlock - 50) / 10.0) * 10.0
  
-    while not game_over:
+    while not gameOver:
  
-        while game_close == True:
+        while gameClose == True:
             display.fill(grey2)
             message("You Lost! Press R to replay", red)
-            playerScore(Length_of_snake - 1)
+            playerScore(snakeLength - 1)
             lightX = random.randint(0,7)
             lightY = random.randint(0,7)
             lightR = random.randint(0,255)
@@ -84,13 +84,13 @@ def gameLoop():
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
-                        game_over = True
-                        game_close = False
+                        gameOver = True
+                        gameClose = False
                     if event.key == pygame.K_r:
                         # sense.clear(grey)
                         gameLoop()
                         
-            while game_over == True:
+            while gameOver == True:
                 lightX = random.randint(0,7)
                 lightY = random.randint(0,7)
                 lightR = random.randint(0,255)
@@ -100,7 +100,7 @@ def gameLoop():
  
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_over = True
+                gameOver = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     x1_change = -snakeBlock
@@ -116,44 +116,44 @@ def gameLoop():
                     x1_change = 0
  
         if x1 >= windowWidth or x1 < 0 or y1 >= windowHeight or y1 < 0:
-            game_close = True
+            gameClose = True
         x1 += x1_change
         y1 += y1_change
         display.fill(grey)
-        pygame.draw.rect(display, red, [foodXPos, foodYPos, snakeBlock, snakeBlock])
-        pygame.draw.rect(display, yellow, [powerUpXPos, powerUpYPos, snakeBlock, snakeBlock])
-        snake_Head = []
-        snake_Head.append(x1)
-        snake_Head.append(y1)
-        snake_List.append(snake_Head)
-        if len(snake_List) > Length_of_snake:
-            del snake_List[0]
+        pygame.draw.rect(display, red, [appleXPos, appleYPos, snakeBlock, snakeBlock])
+        pygame.draw.rect(display, yellow, [lemonXPos, lemonYPos, snakeBlock, snakeBlock])
+        snakeHead = []
+        snakeHead.append(x1)
+        snakeHead.append(y1)
+        snakeList.append(snakeHead)
+        if len(snakeList) > snakeLength:
+            del snakeList[0]
  
-        for x in snake_List[:-1]:
-            if x == snake_Head:
-                game_close = True
+        for x in snakeList[:-1]:
+            if x == snakeHead:
+                gameClose = True
  
-        playerSnake(snakeBlock, snake_List)
-        playerScore(Length_of_snake - 1)
+        playerSnake(snakeBlock, snakeList)
+        playerScore(snakeLength - 1)
     
          
         pygame.display.update()
  
-        if x1 == foodXPos and y1 == foodYPos:
-            foodXPos = round(random.randrange(0, windowWidth - snakeBlock) / 10.0) * 10.0
-            foodYPos = round(random.randrange(0, windowHeight - snakeBlock - 50) / 10.0) * 10.0
-            Length_of_snake += 1
+        if x1 == appleXPos and y1 == appleYPos:
+            appleXPos = round(random.randrange(0, windowWidth - snakeBlock) / 10.0) * 10.0
+            appleYPos = round(random.randrange(0, windowHeight - snakeBlock - 50) / 10.0) * 10.0
+            snakeLength += 1
             pygame.mixer.music.play(0)
             # sense.clear(red)
             # time.sleep(0.5)
             # sense.clear(grey)
             
-        if x1 == powerUpXPos and y1 == powerUpYPos:
-            powerUpChance = random.randint(0,2)
-            if powerUpChance == 0:
-                powerUpXPos = round(random.randrange(0, windowWidth - snakeBlock) / 10.0) * 10.0
-                powerUpYPos = round(random.randrange(0, windowHeight - snakeBlock - 50) / 10.0) * 10.0
-                Length_of_snake += 3
+        if x1 == lemonXPos and y1 == lemonYPos:
+            lemonChance = random.randint(0,2)
+            if lemonChance == 0:
+                lemonXPos = round(random.randrange(0, windowWidth - snakeBlock) / 10.0) * 10.0
+                lemonYPos = round(random.randrange(0, windowHeight - snakeBlock - 50) / 10.0) * 10.0
+                snakeLength += 3
                 pygame.mixer.music.play(1)
                 # sense.clear(yellow)
                 # time.sleep(0.5)
